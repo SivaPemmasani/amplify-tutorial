@@ -34,6 +34,9 @@ jobs:
         role-to-assume: arn:aws:iam::366085906151:role/Aws-GitHub-Integration-Role
         aws-region: 'us-east-1'
         
+    - name: Check for AppSync API
+      run: amplify status | grep -q "API" || echo "No API configured. Skipping deployment." && exit 1
+
     - name: build & deploy
       run: |
         amplify pull --appId "d3n9uf2pc6zq9g" --amplify "{\"envName\":\"staging\"}" --frontend "{\"frontend\":\"javascript\",\"framework\":\"react\",\"config\":{\"SourceDir\":\"src\",\"DistributionDir\":\"build\",\"BuildCommand\":\"npm run-script build\",\"StartCommand\":\"npm run-script start\"}}" --providers "{\"awscloudformation\":{\"configLevel\":\"general\"}}" --yes
